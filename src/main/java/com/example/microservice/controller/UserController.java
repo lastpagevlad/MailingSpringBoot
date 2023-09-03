@@ -1,16 +1,23 @@
 package com.example.microservice.controller;
 
-import com.example.microservice.model.User;
+import com.example.microservice.store.entity.User;
 import com.example.microservice.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@Tag(name = "Управление пользователями (User)")
 public class UserController {
     private final UserService userService;
 
@@ -19,10 +26,17 @@ public class UserController {
         this.userService = userService;
     }
 
-    //Создание пользователя
-    //ResponseEnity<?> класс для возврата ответа, с помощью которого пользователю возвращается статус код
-    //@RequesBody подставляется из тела запроса
-    @PostMapping(value = "/users")
+    @Operation(summary = "Добавление пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201",
+                    description = "Пользователь добавлен"),
+            @ApiResponse(responseCode = "401",
+                    description = "В случае если запрос отправлен без токена или с недействительным " +
+                            "токеном возвращается ошибка 401 и строка с ошибкой в теле запроса.",
+                    content = @Content(schema = @Schema(implementation = String.class))
+            )
+    })
+    @PostMapping(value = "/users", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> create(@RequestBody User user){
         userService.create(user);
         return new ResponseEntity<>(HttpStatus.CREATED);

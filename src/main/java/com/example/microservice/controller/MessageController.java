@@ -1,9 +1,7 @@
 package com.example.microservice.controller;
 
-import com.example.microservice.model.Message;
-import com.example.microservice.model.User;
+import com.example.microservice.store.entity.Message;
 import com.example.microservice.service.MessageSerivce;
-import com.example.microservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

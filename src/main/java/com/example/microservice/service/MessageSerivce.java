@@ -1,7 +1,6 @@
 package com.example.microservice.service;
 
-import com.example.microservice.model.Message;
-import com.example.microservice.model.User;
+import com.example.microservice.store.entity.Message;
 
 import java.util.List;
 

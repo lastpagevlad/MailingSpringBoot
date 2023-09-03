@@ -1,6 +1,6 @@
 package com.example.microservice.service;
 
-import com.example.microservice.model.User;
+import com.example.microservice.store.entity.User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
