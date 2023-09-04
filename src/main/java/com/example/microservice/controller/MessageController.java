@@ -2,6 +2,11 @@ package com.example.microservice.controller;
 
 import com.example.microservice.store.entity.Message;
 import com.example.microservice.service.MessageSerivce;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,17 +23,32 @@ public class MessageController {
         this.messageSerivce = messageSerivce;
     }
 
-    //Создание пользователя
-    //ResponseEnity<?> класс для возврата ответа, с помощью которого пользователю возвращается статус код
-    //@RequesBody подставляется из тела запроса
+    @Operation(summary = "Добавление сообщения")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201",
+                    description = "Сообщение добавлено"),
+            @ApiResponse(responseCode = "401",
+                    description = "В случае если запрос отправлен без токена или с недействительным " +
+                            "токеном возвращается ошибка 401 и строка с ошибкой в теле запроса.",
+                    content = @Content(schema = @Schema(implementation = String.class))
+            )
+    })
     @PostMapping(value = "/messages")
     public ResponseEntity<?> create(@RequestBody Message message){
         messageSerivce.create(message);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    //Получение списка пользователей
-    //Возвращается не только статус, но и тело ответа
+    @Operation(summary = "Отображение сообщений")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Сообщения отображены"),
+            @ApiResponse(responseCode = "404",
+                    description = "Сервер не может найти запрашиваемый ресурс." +
+                            " Код этого ответа, наверно, самый известный из-за частоты его появления в вебе. ",
+                    content = @Content(schema = @Schema(implementation = String.class))
+            )
+    })
     @GetMapping(value = "/messages")
     public ResponseEntity<List<Message>> read(){
         final List<Message> messages = messageSerivce.readAll();
@@ -36,8 +56,16 @@ public class MessageController {
                 ? new ResponseEntity<>(messages,HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
-    //Получение пользователя по айди
+    @Operation(summary = "Отображение сообщений по идентификатору")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Сообщение отображено отображен"),
+            @ApiResponse(responseCode = "404",
+                    description = "Сервер не может найти запрашиваемый ресурс." +
+                            " Код этого ответа, наверно, самый известный из-за частоты его появления в вебе. ",
+                    content = @Content(schema = @Schema(implementation = String.class))
+            )
+    })
     @GetMapping(value = "/messages/{id}")
     public ResponseEntity<Message> read(@PathVariable(name = "id") int id){
         final Message message = messageSerivce.read(id);
@@ -46,7 +74,16 @@ public class MessageController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    //Обновление пользователя
+    @Operation(summary = "Обновление сообщения")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Сообщение обновлено"),
+            @ApiResponse(responseCode = "404",
+                    description = "Сервер не может найти запрашиваемый ресурс. " +
+                            "Код этого ответа, наверно, самый известный из-за частоты его появления в вебе. ",
+                    content = @Content(schema = @Schema(implementation = String.class))
+            )
+    })
     @PutMapping(value = "/messages/{id}")
     public ResponseEntity<?> update(@PathVariable(name = "id") int id, @RequestBody Message message){
         final boolean updated = messageSerivce.update(message, id);
@@ -55,7 +92,16 @@ public class MessageController {
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    //Удаление пользователя
+    @Operation(summary = "Удаление сообщения")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Сообщение удалено"),
+            @ApiResponse(responseCode = "404",
+                    description = "Сервер не может найти запрашиваемый ресурс. " +
+                            "Код этого ответа, наверно, самый известный из-за частоты его появления в вебе. ",
+                    content = @Content(schema = @Schema(implementation = String.class))
+            )
+    })
     @DeleteMapping(value = "/messages/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") int id){
         final boolean deleted = messageSerivce.delete(id);

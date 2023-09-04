@@ -42,8 +42,16 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    //Получение списка пользователей
-    //Возвращается не только статус, но и тело ответа
+    @Operation(summary = "Отображение пользователей")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Пользователи отображены"),
+            @ApiResponse(responseCode = "404",
+                    description = "Сервер не может найти запрашиваемый ресурс." +
+                            " Код этого ответа, наверно, самый известный из-за частоты его появления в вебе. ",
+                    content = @Content(schema = @Schema(implementation = String.class))
+            )
+    })
     @GetMapping(value = "/users")
     public ResponseEntity<List<User>> read(){
         final List<User> users = userService.readAll();
@@ -51,8 +59,16 @@ public class UserController {
                 ? new ResponseEntity<>(users,HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
-    //Получение пользователя по айди
+    @Operation(summary = "Отображение пользователя по идентификатору")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Пользователь отображен"),
+            @ApiResponse(responseCode = "404",
+                    description = "Сервер не может найти запрашиваемый ресурс." +
+                            " Код этого ответа, наверно, самый известный из-за частоты его появления в вебе. ",
+                    content = @Content(schema = @Schema(implementation = String.class))
+            )
+    })
     @GetMapping(value = "/users/{id}")
     public ResponseEntity<User> read(@PathVariable(name = "id") int id){
         final User user = userService.read(id);
@@ -60,8 +76,16 @@ public class UserController {
                 ? new ResponseEntity<>(user, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
-    //Обновление пользователя
+    @Operation(summary = "Обновление пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Пользователь обновлен"),
+            @ApiResponse(responseCode = "404",
+                    description = "Сервер не может найти запрашиваемый ресурс. " +
+                            "Код этого ответа, наверно, самый известный из-за частоты его появления в вебе. ",
+                    content = @Content(schema = @Schema(implementation = String.class))
+            )
+    })
     @PutMapping(value = "/users/{id}")
     public ResponseEntity<?> update(@PathVariable(name = "id") int id, @RequestBody User user){
         final boolean updated = userService.update(user, id);
@@ -70,7 +94,16 @@ public class UserController {
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    //Удаление пользователя
+    @Operation(summary = "Удаление пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Пользователь удален"),
+            @ApiResponse(responseCode = "404",
+                    description = "Сервер не может найти запрашиваемый ресурс. " +
+                            "Код этого ответа, наверно, самый известный из-за частоты его появления в вебе. ",
+                    content = @Content(schema = @Schema(implementation = String.class))
+            )
+    })
     @DeleteMapping(value = "/users/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") int id){
         final boolean deleted = userService.delete(id);

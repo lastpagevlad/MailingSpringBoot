@@ -4,6 +4,6 @@ springdoc:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    username:
-    password:
-    url:
+    username: postgres
+    password: soad13
+    url: jdbc:postgresql://localhost:5433/MailingService
