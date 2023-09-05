@@ -3,6 +3,7 @@ package com.example.microservice.service;
 import com.example.microservice.store.entity.Message;
 import com.example.microservice.store.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
